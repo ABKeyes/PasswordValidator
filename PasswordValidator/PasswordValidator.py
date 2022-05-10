@@ -1,21 +1,36 @@
-def validate(password, args=[], lower=1, upper=float('inf')):
+import re
+
+def validate(password, args=None, lower=1, upper=float('inf')):
     
-    if(not(all(regex.match(password) for regex in args))):
-        return False
+    valid = True
+    message = "Password is acceptable"
+    failed = []
+
+    if(args==None):
+        args = []
 
     if(lower <= 0):
-        return False, "Lower limit cannot be less than 1"
-
+        return False, "Lower limit cannot be less than 1", failed
     if(upper < lower):
-        return False, "Invalid Upper Bound"
+        return False, "Invalid upper bound", failed
+
+    for i, regex in enumerate(args):
+        pattern = re.compile(regex)
+        match = pattern.search(password)
+        if(match is None):
+            failed.append(i)
+            valid = False
+            message = "Failed regex test"
 
     if(len(password) < lower):
-        return False
+        valid = False
+        message = "Password too short"
 
     if(len(password) > upper):
-        return False
+        valid = False
+        message = "Password too long"
 
-    return True, "Password is acceptable"
+    return valid, message, failed
 
 def main():
     print("Welcome to Password Validation Program!!")
