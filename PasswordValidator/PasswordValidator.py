@@ -1,5 +1,9 @@
 import re
 
+
+# Password Validator Function
+# Allows user to pass a password string and a list of requirements that the password must adhere to.
+# The method will then test each requirement and return True if all requirements are met
 def validate(password, args=None, lower=1, upper=float('inf')):
     
     valid = True
